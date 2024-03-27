@@ -1,0 +1,23 @@
+apiVersion: hive.openshift.io/v1
+kind: ClusterDeployment
+metadata:
+    annotations:
+        argocd.argoproj.io/sync-wave: "1"
+        ran.openshift.io/ztp-gitops-generated: '{}'
+    name: dell-sno1
+    namespace: dell-sno1
+spec:
+    baseDomain: product-int.example.com
+    clusterInstallRef:
+        group: extensions.hive.openshift.io
+        kind: AgentClusterInstall
+        name: dell-sno1
+        version: v1beta1
+    clusterName: dell-sno1
+    platform:
+        agentBareMetal:
+            agentSelector:
+                matchLabels:
+                    cluster-name: dell-sno1
+    pullSecretRef:
+        name: assisted-deployment-pull-secret

@@ -1,0 +1,17 @@
+apiVersion: cluster.open-cluster-management.io/v1
+kind: ManagedCluster
+metadata:
+    annotations:
+        argocd.argoproj.io/sync-wave: "2"
+        ran.openshift.io/ztp-gitops-generated: '{}'
+    labels:
+        common-415: "true"
+        du-profile: seed
+        flexran: timer-mode
+        group-du-sno: ""
+        logicalGroup: active
+        sites: product-int.example.com
+        vendor: OpenShift
+    name: dell-sno1
+spec:
+    hubAcceptsClient: true

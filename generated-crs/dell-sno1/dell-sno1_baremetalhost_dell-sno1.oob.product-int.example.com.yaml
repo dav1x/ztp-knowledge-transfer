@@ -1,0 +1,23 @@
+apiVersion: metal3.io/v1alpha1
+kind: BareMetalHost
+metadata:
+    annotations:
+        argocd.argoproj.io/sync-wave: "1"
+        bmac.agent-install.openshift.io/hostname: dell-sno1.oob.product-int.example.com
+        bmac.agent-install.openshift.io/role: master
+        ran.openshift.io/ztp-gitops-generated: '{}'
+    labels:
+        infraenvs.agent-install.openshift.io: dell-sno1
+    name: dell-sno1.oob.product-int.example.com
+    namespace: dell-sno1
+spec:
+    automatedCleaningMode: disabled
+    bmc:
+        address: idrac-virtualmedia://10.6.0.84/redfish/v1/Systems/System.Embedded.1
+        credentialsName: dell-sno1-worker
+        disableCertificateVerification: true
+    bootMACAddress: 7C:C2:55:99:BE:EF
+    bootMode: UEFI
+    online: true
+    rootDeviceHints:
+        deviceName: /dev/sda

@@ -1,0 +1,27 @@
+apiVersion: extensions.hive.openshift.io/v1beta1
+kind: AgentClusterInstall
+metadata:
+    annotations:
+        agent-install.openshift.io/install-config-overrides: '{"networking":{"networkType":"OVNKubernetes"},"cpuPartitioningMode":"AllNodes"}'
+        argocd.argoproj.io/sync-wave: "1"
+        ran.openshift.io/ztp-gitops-generated: '{}'
+    name: dell-sno1
+    namespace: dell-sno1
+spec:
+    clusterDeploymentRef:
+        name: dell-sno1
+    imageSetRef:
+        name: img4.15.0-x86-64-appsub
+    manifestsConfigMapRef:
+        name: dell-sno1
+    networking:
+        clusterNetwork:
+            - cidr: 10.128.0.0/14
+              hostPrefix: 23
+        machineNetwork:
+            - cidr: 10.0.0.0/24
+        serviceNetwork:
+            - 172.30.0.0/16
+    provisionRequirements:
+        controlPlaneAgents: 1
+    sshPublicKey: ssh-rsa KEYHERE

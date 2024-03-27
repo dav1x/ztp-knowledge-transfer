@@ -1,0 +1,24 @@
+apiVersion: agent.open-cluster-management.io/v1
+kind: KlusterletAddonConfig
+metadata:
+    annotations:
+        argocd.argoproj.io/sync-wave: "2"
+        ran.openshift.io/ztp-gitops-generated: '{}'
+    name: dell-sno1
+    namespace: dell-sno1
+spec:
+    applicationManager:
+        enabled: false
+    certPolicyController:
+        enabled: false
+    clusterLabels:
+        cloud: auto-detect
+        vendor: auto-detect
+    clusterName: dell-sno1
+    clusterNamespace: dell-sno1
+    iamPolicyController:
+        enabled: false
+    policyController:
+        enabled: true
+    searchCollector:
+        enabled: false

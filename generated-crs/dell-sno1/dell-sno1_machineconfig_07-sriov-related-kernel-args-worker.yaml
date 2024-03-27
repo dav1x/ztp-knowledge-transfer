@@ -1,0 +1,15 @@
+apiVersion: machineconfiguration.openshift.io/v1
+kind: MachineConfig
+metadata:
+    annotations:
+        ran.openshift.io/ztp-gitops-generated: '{}'
+    labels:
+        machineconfiguration.openshift.io/role: worker
+    name: 07-sriov-related-kernel-args-worker
+spec:
+    config:
+        ignition:
+            version: 3.2.0
+    kernelArguments:
+        - intel_iommu=on
+        - iommu=pt
