@@ -1,0 +1,39 @@
+apiVersion: agent-install.openshift.io/v1beta1
+kind: NMStateConfig
+metadata:
+    annotations:
+        argocd.argoproj.io/sync-wave: "1"
+        ran.openshift.io/ztp-gitops-generated: '{}'
+    labels:
+        nmstate-label: dell-sno1
+    name: dell-sno1.oob.product-int.example.com
+    namespace: dell-sno1
+spec:
+    config:
+        dns-resolver:
+            config:
+                server:
+                    - 10.0.0.2
+                    - 10.0.0.1
+        interfaces:
+            - ipv4:
+                address:
+                    - ip: 10.0.0.31
+                      prefix-length: 24
+                dhcp: false
+                enabled: true
+              ipv6:
+                autoconf: false
+                dhcp: false
+                enabled: false
+              name: eno1np0
+              state: up
+              type: ethernet
+        routes:
+            config:
+                - destination: 0.0.0.0/0
+                  next-hop-address: 10.0.0.254
+                  next-hop-interface: eno1np0
+    interfaces:
+        - name: eno1np0
+          macAddress: 7C:C2:55:99:BE:EF

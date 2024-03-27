@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+    annotations:
+        argocd.argoproj.io/sync-wave: "0"
+        ran.openshift.io/ztp-gitops-generated: '{}'
+    labels:
+        name: dell-sno1
+    name: dell-sno1

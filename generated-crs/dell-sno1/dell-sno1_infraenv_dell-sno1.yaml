@@ -1,0 +1,20 @@
+apiVersion: agent-install.openshift.io/v1beta1
+kind: InfraEnv
+metadata:
+    annotations:
+        argocd.argoproj.io/sync-wave: "1"
+        ran.openshift.io/ztp-gitops-generated: '{}'
+    name: dell-sno1
+    namespace: dell-sno1
+spec:
+    additionalNTPSources:
+        - clock.redhat.com
+    clusterRef:
+        name: dell-sno1
+        namespace: dell-sno1
+    nmStateConfigLabelSelector:
+        matchLabels:
+            nmstate-label: dell-sno1
+    pullSecretRef:
+        name: assisted-deployment-pull-secret
+    sshAuthorizedKey: ssh-rsa KEYHERE
