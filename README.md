@@ -15,6 +15,8 @@ The site-config CR included in the [repository](https://github.com/openshift-kni
 
 This container is responsible for converting the site-config and site-policies into usable CRs for Advanced Cluster Manager (ACM) and Assisted Service. Here is an example site-config with baremetal host .
 
+
+## Sample SiteConfig
 ```
 ---
 apiVersion: ran.openshift.io/v1
@@ -91,6 +93,8 @@ spec:
                   next-hop-interface: eno1np0
  ```
 
+## The Anatomy of a SiteConfig
+
 Clone the repository and use the included sample site-config to generate the applicable custom resources for the cluster deployment. 
 
 ```
@@ -158,6 +162,8 @@ nmstateconfigs.agent-install.openshift.io                                 2024-0
 In the above 7 CRs generated from the site-config you can identify the components that are a part of [hive](https://github.com/openshift/hive), [acm](https://www.redhat.com/en/technologies/management/advanced-cluster-management) or [open-cluster-management](https://open-cluster-management.io/), [agent-install or assisted service](https://github.com/openshift/assisted-service/blob/master/docs/user-guide/README.md) and [metal3.](https://metal3.io/)
 
 
+## After the Spoke is installed 
+
 These manifests are created and we are brought to step 4 in the following work flow:
 
 ![GitOps ZTP workflow part 1](images/ztp-day-n_1.png)
@@ -198,6 +204,31 @@ TALM looks for labels on the managedcluster and new clusters "auto-create" a clu
 
 As this process is completed TALM ends the workflow by adding a "ztp-done" label to the managedcluster. This signifies the process is complete and also provides additional filtering from further TALM invocations. 
 
+## Updates to the policies in git
+
 Finally, modifications to cluster configurations in git will cause policies to no longer remain compliant. This will allow TALM to rollout progressive changes in a non-destruptive manner for your cluster fleet.
 
 ![GitOps ZTP workflow part 3](images/ztp-day-n_3.png)
+
+## Troubleshooting
+
+Included is a helpful script for cluster install messages via command line. 
+
+```
+$ ./01_checkin_install.sh dell-sno1
+-----Thu Mar 28 04:14:03 PM CDT 2024----------
+null
+null
+
+NAME            HUB ACCEPTED   MANAGED CLUSTER URLS                                         JOINED   AVAILABLE   AGE
+local-cluster   true           https://api.inbound-int.se-lab.eng.rdu2.dc.redhat.com:6443   True     True        17d
+dell-sno1        true                                                                                 Unknown     40m
+
+No resources found in dell-sno1 namespace.
+
+```
+
+For a more in depth breakdown of the hive and assisted service integration the following are great resources:
+
+- https://github.com/openshift/assisted-service/blob/master/docs/hive-integration/ZTP_converged_flow.png
+- https://github.com/openshift/assisted-service/tree/master/docs/hive-integration
