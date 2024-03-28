@@ -1,0 +1,60 @@
+apiVersion: ran.openshift.io/v1
+kind: PolicyGenTemplate
+metadata:
+  name: "common-415"
+  namespace: "ztp-common"
+  annotations:
+spec:
+  bindingRules:
+    common-415: "true"
+    logicalGroup: "active"
+  remediationAction: inform
+  sourceFiles:
+    - fileName: SriovSubscription.yaml
+      policyName: "common-subscription"
+      spec:
+        source: redhat-operators
+    - fileName: SriovSubscriptionNS.yaml
+      policyName: "common-subscription"
+    - fileName: SriovSubscriptionOperGroup.yaml
+      policyName: "common-subscription"
+    - fileName: PtpSubscription.yaml
+      policyName: "common-subscription"
+      spec:
+        channel: "stable"
+        source: redhat-operators
+    - fileName: PtpSubscriptionNS.yaml
+      policyName: "common-subscription"
+    - fileName: PtpSubscriptionOperGroup.yaml
+      policyName: "common-subscription"
+    - fileName: ClusterLogNS.yaml
+      policyName: "common-subscription"
+    - fileName: ClusterLogOperGroup.yaml
+      policyName: "common-subscription"
+    - fileName: ClusterLogSubscription.yaml
+      policyName: "common-subscription"
+      spec:
+        source: redhat-operators
+    # LSO
+    - fileName: StorageNS.yaml
+      policyName: "common-subscription"
+    - fileName: StorageOperGroup.yaml
+      policyName: "common-subscription"
+    - fileName: StorageSubscription.yaml
+      policyName: "common-subscription"
+      spec:
+        channel: "stable"
+        source: redhat-operators
+    - fileName: ReduceMonitoringFootprint.yaml
+      policyName: "common-config"
+    - fileName: AcceleratorsNS.yaml
+      policyName: "common-subscription"
+      #complianceType: mustnothave
+    - fileName: AcceleratorsOperGroup.yaml
+      policyName: "common-subscription"
+      #complianceType: mustnothave
+    - fileName: AcceleratorsSubscription.yaml
+      policyName: "common-subscription"
+      spec:
+        source: certified-operators
+
