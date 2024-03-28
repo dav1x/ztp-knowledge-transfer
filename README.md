@@ -1,8 +1,8 @@
 # Zero Touch Provisioning Workflow 
-Helpful ZTP how-to knowledge
-The [OpenShift Docs](https://docs.openshift.com/container-platform/latest/scalability_and_performance/ztp_far_edge/ztp-manual-install.html) provides some exhaustive information on how to deploy a managed single-node OpenShift cluster using Red Hat Advanced Cluster Management (RHACM) and the assisted service. 
 
-![GitOps ZTP flow overview](https://github.com/openshift-kni/cnf-features-deploy/blob/release-4.15/ztp/gitops-subscriptions/argocd/ztp_gitops_flow.png)
+The [OpenShift Docs](https://docs.openshift.com/container-platform/latest/scalability_and_performance/ztp_far_edge/ztp-manual-install.html) provide some exhaustive information on how to deploy a managed single-node OpenShift cluster using Red Hat Advanced Cluster Management (RHACM) and the assisted service. 
+
+![GitOps ZTP flow overview](images/ztp_gitops_flow.png)
 
 The [CNF features repo](https://github.com/openshift-kni/cnf-features-deploy/tree/release-4.15/ztp/gitops-subscriptions/argocd) walks through the setup of the GitOps workflow for ZTP deployment and policy rollout for installation.
 
@@ -156,3 +156,48 @@ nmstateconfigs.agent-install.openshift.io                                 2024-0
 ```
 
 In the above 7 CRs generated from the site-config you can identify the components that are a part of [hive](https://github.com/openshift/hive), [acm](https://www.redhat.com/en/technologies/management/advanced-cluster-management) or [open-cluster-management](https://open-cluster-management.io/), [agent-install or assisted service](https://github.com/openshift/assisted-service/blob/master/docs/user-guide/README.md) and [metal3.](https://metal3.io/)
+
+
+These manifests are created and we are brought to step 4 in the following work flow:
+
+![GitOps ZTP workflow part 1](images/ztp-day-n_1.png)
+
+Now, cluster policies are assigned based on the managedcluster labels and placement rules of created policies. All of these policies are created as "inform". The [Topology Aware Lifecycle Manager (TALM)](https://www.redhat.com/en/blog/how-to-use-the-topology-aware-lifecycle-manager) assists with managing the rest of the lifecycle of the cluster including remediating required policies. 
+
+```
+  - clusterName: "smc-sno1"
+    clusterLabels:
+      # Placement Rule Labels for policy binding 
+      logicalGroup: "active"
+      common-415: "true"
+
+..omitted..
+
+apiVersion: ran.openshift.io/v1
+kind: PolicyGenTemplate
+metadata:
+  name: "common-415"
+  namespace: "ztp-common"
+  annotations:
+spec:
+  bindingRules:
+    common-415: "true"
+    logicalGroup: "active"
+  remediationAction: inform
+  sourceFiles:
+    # Create operators policies that will be installed in all clusters
+    # SRIOV
+    - fileName: SriovSubscription.yaml
+      policyName: "common-subscription"
+      spec:
+```
+
+TALM looks for labels on the managedcluster and new clusters "auto-create" a cluster group upgrade (CGU) that marks the policies to "enforce" mode in waves. For example, Operator configurations require subscriptions which require catalog sources etc.
+
+![GitOps ZTP workflow part 2](images/ztp-day-n_2.png)
+
+As this process is completed TALM ends the workflow by adding a "ztp-done" label to the managedcluster. This signifies the process is complete and also provides additional filtering from further TALM invocations. 
+
+Finally, modifications to cluster configurations in git will cause policies to no longer remain compliant. This will allow TALM to rollout progressive changes in a non-destruptive manner for your cluster fleet.
+
+![GitOps ZTP workflow part 3](images/ztp-day-n_3.png)
