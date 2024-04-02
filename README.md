@@ -232,3 +232,4 @@ For a more in depth breakdown of the hive and assisted service integration the f
 
 - https://github.com/openshift/assisted-service/blob/master/docs/hive-integration/ZTP_converged_flow.png
 - https://github.com/openshift/assisted-service/tree/master/docs/hive-integration
+- https://www.redhat.com/en/blog/red-hat-openshift-edge-zero-touch-provisioning
